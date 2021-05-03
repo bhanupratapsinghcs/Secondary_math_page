@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Math</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            background-color: darkslategray;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item {
+            height: 90vh;
+            width: 80%;
+            font-size: 50px;
+            border-radius: 5px;
+            background-color: lightblue;
+            flex-direction: column;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        span {
+            margin: 10px;
+            font-size: 50px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        input {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid red;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body onload="checkCookies()">
+    <div class="container">
+        <div class="item">
+            <div class="problem">
+                <span id='num1'></span> + <span id="num2"></span>
+            </div>
+            <input type="number" id='inputRwsult'>
+            <div id="btn" onclick="getResult()">
+                <button type="submit">check Answer</button>
+            </div>
+            <div class="correct-answer">
+                Answer: <span id="result"></span>
+            </div>
+            <div class="btn" onclick="nextQues()">
+                <button type="submit">Next Answer</button>
+            </div>
+            Score: <span id="score"></span>
+        </div>
+
+    </div>
+    <script>
+        var num1 = Math.floor(Math.random() * (1000 - (-1000) + 1)) + (-1000);
+        var num2 = Math.floor(Math.random() * (1000 - (-1000) + 1)) + (-1000);
+
+        var result = Number(getCookie('result'))
+        document.getElementById('num1').innerHTML = num1;
+        document.getElementById('num2').innerHTML = num2;
+        function setCookie(name, rslt, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toGMTString();
+            document.cookie = name + '=' + rslt + ';' + expires + ";path=/";
+        }
+        function getCookie(name) {
+            var cname = name + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(cname) == 0) {
+                    return c.substring(cname.length, c.length);
+                }
+            }
+            return "";
+        }
+        function checkCookies() {
+            var rslt = getCookie('result');
+            rslt = Number(rslt)
+            if (rslt != 0) {
+                setCookie('result', result, 30)
+            }
+            else if (result != 0) {
+                setCookie('result', result, 30)
+            }
+            else {
+                setCookie('result', 0, 30)
+            }
+            document.getElementById('score').innerHTML = rslt
+        }
+
+        function getResult() {
+            var input = document.getElementById('inputRwsult').value;
+            var x = num1 + num2;
+            if (input == '') {
+                document.getElementById("result").innerHTML = "Enter the Answer";
+                checkCookies()
+            }
+            else if (input == x) {
+                document.getElementById("result").innerHTML = x;
+                document.getElementById("btn").remove();
+                result++;
+                checkCookies()
+                document.getElementById('score').innerHTML = result;
+            }
+            else {
+                document.getElementById("result").innerHTML = "Wrong Answer";
+                result--;
+                checkCookies()
+                document.getElementById('score').innerHTML = result;
+            }
+
+        }
+        function nextQues() {
+            window.parent.location = window.parent.location.href;
+        }
+    </script>
+</body>
+
+</html>
